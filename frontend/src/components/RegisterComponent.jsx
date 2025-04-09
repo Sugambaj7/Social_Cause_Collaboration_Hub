@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { userRegister } from "../features/user/userRegisterSlice";
 
 const RegisterComponent = () => {
   const [name, setName] = useState("");
@@ -9,18 +11,82 @@ const RegisterComponent = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log(error, "k xa error ma");
+  }, [error]);
+  const validate = () => {
+    if (name === "") {
+      setError("Full Name is not supposed to be empty");
+      return false;
+    } else if (!/^[a-zA-Z ]{1,18}$/g.test(name)) {
+      setError("Invalid characters in full name");
+      return false;
+    } else if (name.length < 8) {
+      setError("Full Name should be at least 8 characters long");
+      return false;
+    } else if (email === "") {
+      setError("Email is not supposed to be empty");
+      return false;
+    } else if (
+      !/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i.test(email)
+    ) {
+      setError("Invalid Email");
+      return false;
+    } else if (mobile === "") {
+      setError("Mobile number is not supposed to be empty");
+      return false;
+    } else if (!/^9[6-8][0-9]{8}$/.test(mobile)) {
+      setError("Invalid Mobile Number");
+      return false;
+    } else if (password === "") {
+      setError("Password is not supposed to be empty");
+      return false;
+    } else if (password.length < 8) {
+      setError("Password should be at least 8 characters long");
+      return false;
+    } else if (confirmPassword === "") {
+      setError("Confirm Password is not supposed to be empty");
+      return false;
+    } else if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return false;
+    } else {
+      setError("");
+      return true;
+    }
+  };
+
   const submitHandler = (e) => {
+    if (validate()) {
+      dispatch(userRegister({ name, email, mobile, password }));
+      // console.log(
+      //   name,
+      //   email,
+      //   mobile,
+      //   password,
+      //   confirmPassword,
+      //   "validate vayo"
+      // );
+    }
+    console.log(error, "error vayo");
     e.preventDefault();
   };
 
   return (
-    <div className="w-full flex justify-between mt-10 mb-24">
+    <div className="w-full flex justify-between mt-10 mb-20">
       <div></div>
       <div className="h-full w-[35%]">
         <form action="" onSubmit={submitHandler}>
           <h2 className="text-3xl">SIGN UP</h2>
+          {error && (
+            <div className="w-full bg-custom_alert px-6 py-3 border rounded mt-8 mb-6">
+              <p className="text-alert_red text-sm tracking-wide">{error}</p>
+            </div>
+          )}
           <div className="flex flex-col mt-4">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">Full Name</label>
             <input
               className="mt-2 px-6 py-2 outline-none bg-custom_white border focus:border-2 border-custom_border"
               type="text"
