@@ -13,6 +13,9 @@ export default {
       backgroundImage: {
         custom_gradient: "linear-gradient(90deg, #1F5DB6 0%, #1F5DB6 100%)",
       },
+      borderColor: {
+        custom_border: "#ced4da",
+      },
     },
   },
   plugins: [],
