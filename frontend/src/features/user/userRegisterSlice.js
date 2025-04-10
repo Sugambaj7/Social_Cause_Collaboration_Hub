@@ -10,7 +10,16 @@ const initialState = {
 export const userRegister = createAsyncThunk(
   "user/register",
   async (userData, { rejectWithValue }) => {
-    console.log(userData, "userData in register slice");
+    try {
+      console.log(userData, "userData in register slice");
+      const response = await axios.post(
+        "http://localhost:5000/user/register",
+        userData
+      );
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
   }
 );
 
