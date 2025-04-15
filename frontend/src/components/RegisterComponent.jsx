@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { userRegister } from "../features/user/userRegisterSlice";
 
@@ -10,6 +10,10 @@ const RegisterComponent = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+
+  const { loading, myerror, success, msg } = useSelector(
+    (state) => state.userRegister
+  );
 
   const dispatch = useDispatch();
 
@@ -60,17 +64,14 @@ const RegisterComponent = () => {
 
   const submitHandler = (e) => {
     if (validate()) {
-      dispatch(userRegister({ name, email, mobile, password }));
-      // console.log(
-      //   name,
-      //   email,
-      //   mobile,
-      //   password,
-      //   confirmPassword,
-      //   "validate vayo"
-      // );
+      dispatch(
+        userRegister({ name, email, mobile, password, confirmPassword })
+      );
+      setName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
     }
-    console.log(error, "error vayo");
     e.preventDefault();
   };
 
@@ -80,6 +81,11 @@ const RegisterComponent = () => {
       <div className="h-full w-[35%]">
         <form action="" onSubmit={submitHandler}>
           <h2 className="text-3xl">SIGN UP</h2>
+          {success && msg !== "" && (
+            <div className="w-full bg-custom_green px-6 py-3 border rounded mt-8 mb-6">
+              <p className="text-white text-sm tracking-wide">{msg}</p>
+            </div>
+          )}
           {error && (
             <div className="w-full bg-custom_alert px-6 py-3 border rounded mt-8 mb-6">
               <p className="text-alert_red text-sm tracking-wide">{error}</p>

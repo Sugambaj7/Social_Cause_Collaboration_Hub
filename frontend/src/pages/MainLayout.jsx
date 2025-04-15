@@ -5,12 +5,12 @@ import FooterComponent from "../components/FooterComponent";
 
 export default function MainLayout() {
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <NavBarComponent />
-      <main>
+      <main className="flex-grow">
         <Outlet />
       </main>
       <FooterComponent />
-    </>
+    </div>
   );
 }

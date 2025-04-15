@@ -17,7 +17,10 @@ export default function NavBarComponent() {
             </a>
           </li>
           <li className="w-[90%] text-end mr-14">
-            <span className="px-1 cursor-pointer hover:underline">Login</span>
+            <Link to="/login">
+              <span className="px-1 cursor-pointer hover:underline">Login</span>
+            </Link>
+
             <span className="px-4">|</span>
             <Link to={"/register"}>
               <span className="px-1 cursor-pointer hover:underline">
