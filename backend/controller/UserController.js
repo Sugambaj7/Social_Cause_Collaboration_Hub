@@ -1,8 +1,21 @@
+const User = require("../model/UserModel");
+
 class UserController {
   SignUp = async (req, res) => {
     try {
-      console.log("hello from user controller");
-      console.log(req.body, "req body from user controller");
+      const { name, email, mobile, password, confirmPassword } = req.body;
+
+      const user = new User({
+        fullName: name,
+        email,
+        mobile,
+        password,
+        confirmPassword,
+      });
+
+      await user.save();
+
+      res.status(201).json({ message: "User registered successfully" });
     } catch (err) {
       console.log(err);
     }
