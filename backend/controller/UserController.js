@@ -46,7 +46,6 @@ class UserController {
   Login = async (req, res) => {
     const { email, password } = req.body;
 
-    // Validate input fields
     if (!email || !password) {
       return res.status(400).json({ message: "Please fill all the fields!" });
     }
@@ -62,22 +61,21 @@ class UserController {
     }
 
     try {
-      // Find user by email
       const user = await User.findOne({ email });
       if (!user) {
         return res.status(404).json({ message: "Invalid Credentials!" });
       }
 
-      // Compare passwords
       const passwordMatch = bcrypt.compareSync(password, user.password);
       if (!passwordMatch) {
         return res.status(400).json({ message: "Invalid Password!" });
       }
 
-      // Generate token
       const token = generateToken(user._id);
+      if (!token) {
+        return res.status(500).json({ message: "Token generation failed!" });
+      }
 
-      // Send response
       return res.status(200).json({
         message: "Login successful!",
         user: {
@@ -89,7 +87,7 @@ class UserController {
         },
       });
     } catch (err) {
-      console.error("Login Error:", err); // Log the error for debugging
+      console.error("Login Error:", err);
       return res.status(500).json({ message: "Internal Server Error" });
     }
   };

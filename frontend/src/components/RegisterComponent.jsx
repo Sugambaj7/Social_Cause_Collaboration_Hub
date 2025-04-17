@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { userRegister } from "../features/user/userRegisterSlice";
+import {
+  userRegister,
+  clearError,
+  updateSuccess,
+} from "../features/user/userRegisterSlice";
 
 const RegisterComponent = () => {
   const [name, setName] = useState("");
@@ -17,9 +21,6 @@ const RegisterComponent = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log(error, "k xa error ma");
-  }, [error]);
   const validate = () => {
     if (name === "") {
       setError("Full Name is not supposed to be empty");
@@ -62,6 +63,11 @@ const RegisterComponent = () => {
     }
   };
 
+  const handleFocus = () => {
+    dispatch(clearError());
+    dispatch(updateSuccess());
+  };
+
   const submitHandler = (e) => {
     if (validate()) {
       dispatch(
@@ -70,10 +76,21 @@ const RegisterComponent = () => {
       setName("");
       setEmail("");
       setPassword("");
+      setMobile("");
       setConfirmPassword("");
     }
     e.preventDefault();
   };
+
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        dispatch(updateSuccess()); 
+      }, 7000);
+
+      return () => clearTimeout(timer); 
+    }
+  }, [success, dispatch]);
 
   return (
     <div className="w-full flex justify-between mt-10 mb-20">
@@ -91,6 +108,11 @@ const RegisterComponent = () => {
               <p className="text-alert_red text-sm tracking-wide">{error}</p>
             </div>
           )}
+          {myerror && (
+            <div className="w-full bg-custom_alert px-6 py-3 border rounded mt-8 mb-6">
+              <p className="text-alert_red text-sm tracking-wide">{myerror}</p>
+            </div>
+          )}
           <div className="flex flex-col mt-4">
             <label htmlFor="name">Full Name</label>
             <input
@@ -100,6 +122,7 @@ const RegisterComponent = () => {
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              onFocus={handleFocus}
             />
           </div>
           <div className="flex flex-col mt-4">
@@ -111,6 +134,7 @@ const RegisterComponent = () => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onFocus={handleFocus}
             />
           </div>
           <div className="flex flex-col mt-4">
@@ -122,6 +146,7 @@ const RegisterComponent = () => {
               id="mobile"
               value={mobile}
               onChange={(e) => setMobile(e.target.value)}
+              onFocus={handleFocus}
             />
           </div>
           <div className="flex flex-col mt-2">
@@ -132,6 +157,7 @@ const RegisterComponent = () => {
               placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onFocus={handleFocus}
             />
           </div>
           <div className="flex flex-col mt-2">
@@ -142,6 +168,7 @@ const RegisterComponent = () => {
               placeholder="Confirm Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              onFocus={handleFocus}
             />
           </div>
           <div className="flex flex-col w-[100px] bg-black text-white mt-4">

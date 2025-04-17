@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 import axiosURL from "../../components/url/AxiosURL";
 
 const initialState = {
@@ -25,6 +24,14 @@ export const userRegister = createAsyncThunk(
 const userRegisterSlice = createSlice({
   name: "userRegister",
   initialState,
+  reducers: {
+    clearError: (state) => {
+      state.myerror = null;
+    },
+    updateSuccess: (state) => {
+      state.success = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(userRegister.pending, (state) => {
@@ -46,4 +53,5 @@ const userRegisterSlice = createSlice({
   },
 });
 
+export const { clearError, updateSuccess } = userRegisterSlice.actions;
 export default userRegisterSlice.reducer;
