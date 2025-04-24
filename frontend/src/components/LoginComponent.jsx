@@ -45,7 +45,7 @@ export default function LoginComponent() {
     event.preventDefault();
   };
 
-  const redirect = location.search ? location.search.split("=")[1] : "/home";
+  const redirect = location.search ? location.search.split("=")[1] : "/dashboard";
 
   useEffect(() => {
     if (myerror) {

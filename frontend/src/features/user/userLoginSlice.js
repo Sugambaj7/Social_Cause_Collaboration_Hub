@@ -20,7 +20,7 @@ const userLoginSlice = createSlice({
     myerror: null,
     success: false,
     msg: null,
-    userInfo: null,
+    userInfo: JSON.parse(localStorage.getItem("userInfo")) || null,
   },
   reducers: {
     updateError: (state) => {

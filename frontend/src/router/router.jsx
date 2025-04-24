@@ -3,6 +3,8 @@ import LandingPage from "../pages/LandingPage";
 import MainLayout from "../pages/MainLayout";
 import RegisterComponent from "../components/RegisterComponent";
 import LoginComponent from "../components/LoginComponent";
+import HomeComponent from "../components/HomeComponent";
+import LoginLandingPage from "../pages/LoginLandingPage";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +22,14 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <LoginComponent />,
+      },
+      {
+        path: "home",
+        element: <LandingPage />,
+      },
+      {
+        path: "dashboard",
+        element: <LoginLandingPage />,
       },
     ],
   },

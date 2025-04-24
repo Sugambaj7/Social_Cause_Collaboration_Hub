@@ -11,7 +11,8 @@ export default {
         custom_blue: "#1F5DB6",
         custom_alert: "#F7DDDC",
         custom_white: "#F5F5F5",
-        custom_green: "#4BBF73"
+        custom_background_white: "#F5F6FA",
+        custom_green: "#4BBF73",
       },
       backgroundImage: {
         custom_gradient: "linear-gradient(90deg, #1F5DB6 0%, #1F5DB6 100%)",
