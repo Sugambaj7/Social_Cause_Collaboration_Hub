@@ -85,10 +85,10 @@ const RegisterComponent = () => {
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
-        dispatch(updateSuccess()); 
+        dispatch(updateSuccess());
       }, 7000);
 
-      return () => clearTimeout(timer); 
+      return () => clearTimeout(timer);
     }
   }, [success, dispatch]);
 
