@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
+import { useDispatch } from "react-redux";
+import { addCause } from "../features/causes/causeSlice"; 
 
 export default function MyCauseComponent() {
   const [editPopup, setEditPopup] = useState(false);
@@ -18,6 +20,8 @@ export default function MyCauseComponent() {
   console.log("Current Date:", currentDate);
   const formattedCurrentDate = currentDate.toISOString().split('T')[0];
   console.log("Formatted Current Date:", formattedCurrentDate);
+
+  const dispatch = useDispatch();
   
 
   const validateAddForm = () => {
@@ -97,14 +101,21 @@ export default function MyCauseComponent() {
 };
 
   const handleAddCause = (e) => {
-    validateAddForm();
-    console.log("Cause Name:", causeName);
-    console.log("Place Name:", placeName);
-    console.log("Cause Description:", causeDescription);
-    console.log("Collaboration Deadline:", collaborationApplicationDeadline);
-    console.log("Start Date:", startDate);
-    console.log("End Date:", endDate);
-    e.preventDefault();
+      e.preventDefault();
+    if(validateAddForm()){
+      dispatch(addCause({
+        causeName,
+        placeName,
+        causeDescription,
+        collaborationApplicationDeadline,
+        time,
+        startDate,
+        endDate
+      }));
+    }
+    else{
+       setError("Please fill the form correctly !!!");
+    }
   }
 
   return (
@@ -220,7 +231,7 @@ export default function MyCauseComponent() {
                       className="px-4 py-2 border"
                       onChange={(e) => setCauseDescription(e.target.value)}
                     />
-                    <label htmlFor="">Collaboration Deadline:</label>
+                    <label htmlFor="">Application Deadline:</label>
                     <input
                       type="date"
                       placeholder="Please Enter Deadline For Collaboration"
