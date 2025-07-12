@@ -8,6 +8,7 @@ const initialState = {
   msg: null,
 };
 
+
 export const userRegister = createAsyncThunk(
   "user/register",
   async (userData, { rejectWithValue }) => {
@@ -21,17 +22,21 @@ export const userRegister = createAsyncThunk(
   }
 );
 
+
 const userRegisterSlice = createSlice({
   name: "userRegister",
   initialState,
+
   reducers: {
     clearError: (state) => {
       state.myerror = null;
     },
+
     updateSuccess: (state) => {
       state.success = false;
     },
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(userRegister.pending, (state) => {
@@ -39,12 +44,14 @@ const userRegisterSlice = createSlice({
         state.myerror = null;
         state.success = false;
       })
+      
       .addCase(userRegister.fulfilled, (state, action) => {
         state.loading = false;
         state.myerror = null;
         state.success = true;
         state.msg = action.payload.message;
       })
+      
       .addCase(userRegister.rejected, (state, action) => {
         state.loading = false;
         state.myerror = action.payload;

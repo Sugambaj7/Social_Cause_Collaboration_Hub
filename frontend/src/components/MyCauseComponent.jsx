@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import { useDispatch } from "react-redux";
-import { addCause } from "../features/causes/causeSlice"; 
+import { addCause } from "../features/causes/causeSlice";
+import { toast } from "react-toastify";
 
 export default function MyCauseComponent() {
   const [editPopup, setEditPopup] = useState(false);
@@ -9,7 +10,10 @@ export default function MyCauseComponent() {
   const [causeName, setCauseName] = useState("");
   const [placeName, setPlaceName] = useState("");
   const [causeDescription, setCauseDescription] = useState("");
-  const [collaborationApplicationDeadline, setCollaborationApplicationDeadline] = useState("");
+  const [
+    collaborationApplicationDeadline,
+    setCollaborationApplicationDeadline,
+  ] = useState("");
   const [time, setTime] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -18,11 +22,10 @@ export default function MyCauseComponent() {
   //getting current date
   const currentDate = new Date();
   console.log("Current Date:", currentDate);
-  const formattedCurrentDate = currentDate.toISOString().split('T')[0];
+  const formattedCurrentDate = currentDate.toISOString().split("T")[0];
   console.log("Formatted Current Date:", formattedCurrentDate);
 
   const dispatch = useDispatch();
-  
 
   const validateAddForm = () => {
     if (causeName === "") {
@@ -65,58 +68,61 @@ export default function MyCauseComponent() {
     } else if (collaborationApplicationDeadline === "") {
       setError("Collaboration Deadline is not supposed to be empty");
       return false;
-    } 
-    else if(collaborationApplicationDeadline < formattedCurrentDate) {
+    } else if (collaborationApplicationDeadline < formattedCurrentDate) {
       setError("Application Deadline cannot be in the past");
       return false;
-    }
-    else if(time === "") {
+    } else if (time === "") {
       setError("Time is not supposed to be empty");
       return false;
-    }
-     else if (startDate === "") {
+    } else if (startDate === "") {
       setError("Start Date is not supposed to be empty");
       return false;
-    }
-    else if(startDate < formattedCurrentDate ) {
+    } else if (startDate < formattedCurrentDate) {
       setError("Start Date cannot be in the past");
       return false;
-    }
-    else if(startDate < collaborationApplicationDeadline){
-      setError("Start Date cannot be before the Application for collaboration Deadline");
+    } else if (startDate < collaborationApplicationDeadline) {
+      setError(
+        "Start Date cannot be before the Application for collaboration Deadline"
+      );
       return false;
-    }
-    else if (endDate === "") {
+    } else if (endDate === "") {
       setError("End Date is not supposed to be empty");
       return false;
-    }
-    else if (endDate < startDate) {
+    } else if (endDate < startDate) {
       setError("End Date cannot be before Start Date");
       return false;
-    }
-    else {
+    } else {
       setError("");
       return true;
+    }
   };
-};
 
   const handleAddCause = (e) => {
-      e.preventDefault();
-    if(validateAddForm()){
-      dispatch(addCause({
-        causeName,
-        placeName,
-        causeDescription,
-        collaborationApplicationDeadline,
-        time,
-        startDate,
-        endDate
-      }));
+    e.preventDefault();
+    if (validateAddForm()) {
+      dispatch(
+        addCause({
+          causeName,
+          placeName,
+          causeDescription,
+          collaborationApplicationDeadline,
+          time,
+          startDate,
+          endDate,
+        })
+      ).then((response) => {
+        setAddCausePopup(false);
+        toast.success(response.payload.message, {
+          position: "top-right",
+          autoClose: 5000,
+          pauseOnHover: true,
+          progress: undefined,
+          theme: "light",
+          border: "1px solid black",
+        });
+      });
     }
-    else{
-       setError("Please fill the form correctly !!!");
-    }
-  }
+  };
 
   return (
     <div>
@@ -124,7 +130,6 @@ export default function MyCauseComponent() {
         <h3 className="text-2xl font-semibold mt-12 mb-6 tracking-wider">
           My Causes
         </h3>
-       
 
         <button
           className="bg-custom_blue text-white px-4 py-2 rounded-md absolute right-0 top-[40%]"
@@ -210,7 +215,7 @@ export default function MyCauseComponent() {
                     className="flex flex-col gap-4"
                     onSubmit={handleAddCause}
                   >
-                     {error ? <p className="text-red-600">{error}</p> : ""}
+                    {error ? <p className="text-red-600">{error}</p> : ""}
                     <input
                       type="text"
                       placeholder="Please Enter Cause Name"
@@ -236,7 +241,9 @@ export default function MyCauseComponent() {
                       type="date"
                       placeholder="Please Enter Deadline For Collaboration"
                       className="px-4 py-2 border"
-                      onChange={(e) => setCollaborationApplicationDeadline(e.target.value)}
+                      onChange={(e) =>
+                        setCollaborationApplicationDeadline(e.target.value)
+                      }
                     />
                     <input
                       type="time"
