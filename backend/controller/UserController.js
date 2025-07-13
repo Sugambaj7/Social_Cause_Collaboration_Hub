@@ -6,7 +6,7 @@ const generateToken = require("../utils/generateToken");
 class UserController {
   SignUp = async (req, res) => {
     try {
-      const { name, email, mobile, password, confirmPassword } = req.body;
+      const { name, email, mobile, password, confirmPassword, role } = req.body;
 
       const user = new User({
         fullName: name,
@@ -14,6 +14,7 @@ class UserController {
         mobile,
         password,
         confirmPassword,
+        role,
       });
 
       const userExists = await User.findOne({ email });

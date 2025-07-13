@@ -9,7 +9,7 @@ const causeSchema = new mongoose.Schema(
       maxlength: 50,
       validate: {
         validator: function (value) {
-          return !/^[A-Za-z]+( [A-Za-z]+)*$/.test(value);
+          return /^[A-Za-z, ]+$/.test(value);
         },
         message:
           "Cause Name should not contain special characters, numbers except space and comma",
@@ -22,7 +22,7 @@ const causeSchema = new mongoose.Schema(
       maxlength: 25,
       validate: {
         validator: function (value) {
-          return !/^[A-Za-z]+(?:\s*,\s*[A-Za-z]+)*$/.test(value);
+          return /^[A-Za-z]+(?:\s*,\s*[A-Za-z]+)*$/.test(value);
         },
         message:
           "Place Name should not contain special characters, numbers except spaces and comma",
@@ -35,22 +35,29 @@ const causeSchema = new mongoose.Schema(
       maxlength: 200,
       validate: {
         validator: function (value) {
-          return !/^[A-Za-z0-9.,!?'"()&%\- ]+$/.test(value);
+          return /^[A-Za-z0-9.,!?'"()&%\- ]+$/.test(value);
         },
         message:
           "Invalid characters in Cause Description. Only letters, numbers, spaces, and basic punctuation are allowed.",
       },
     },
     collaborationApplicationDeadline: {
-      type: Date,
-      required: true,
-      validate: {
-        validator: function (value) {
-          return value > Date.now();
-        },
-        message: "Collaboration Application Deadline cannot be a past date.",
-      },
+  type: String,
+  required: true,
+  match: [/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"],
+  validate: {
+    validator: function (value) {
+      // Get today's date in YYYY-MM-DD
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      const todayStr = `${yyyy}-${mm}-${dd}`;
+      return value >= todayStr;
     },
+    message: "Collaboration Application Deadline cannot be a past date.",
+  },
+},
     time: {
       type: String,
       required: true,
