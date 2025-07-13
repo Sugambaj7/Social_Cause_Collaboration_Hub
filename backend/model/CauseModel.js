@@ -82,6 +82,11 @@ const causeSchema = new mongoose.Schema(
         message: "End Date cannot be a past date.",
       },
     },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    }
   },
   {
     timestamps: true,

@@ -4,8 +4,9 @@ const asyncWrapper = require("../middleware/asyncWrapper");
 class CauseController {
       addCause = asyncWrapper(
         async (req, res, next) => {
-            const {causeName, placeName, causeDescription, collaborationApplicationDeadline, time, startDate, endDate} = req.body;
-            
+
+            const {causeName, placeName, causeDescription, collaborationApplicationDeadline, time, startDate, endDate, userId} = req.body;
+            console.log(req.body, "user id");
             const newCause = new Cause({
                 causeName,
                 placeName,
@@ -13,7 +14,8 @@ class CauseController {
                 collaborationApplicationDeadline,
                 time,
                 startDate,
-                endDate
+                endDate,
+                userId
             });
 
             await newCause.save();
