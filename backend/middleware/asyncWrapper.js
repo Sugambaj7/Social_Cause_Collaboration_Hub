@@ -5,7 +5,7 @@
     } catch (err) {
       res.status(500).json({
         success: false,
-        message: "Something wet wrong",
+        message: "Something went wrong",
       });
     }
   };
