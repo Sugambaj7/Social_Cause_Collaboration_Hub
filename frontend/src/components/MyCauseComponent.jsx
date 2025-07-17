@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { RxCross1 } from "react-icons/rx";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addCause } from "../features/causes/causeSlice";
 import { toast } from "react-toastify";
+import { RxCross1 } from "react-icons/rx";
+import CauseListComponent from "./CauseListComponent";
 
 export default function MyCauseComponent() {
-  const [editPopup, setEditPopup] = useState(false);
   const [addCausePopup, setAddCausePopup] = useState(false);
   const [causeName, setCauseName] = useState("");
   const [placeName, setPlaceName] = useState("");
@@ -18,6 +18,7 @@ export default function MyCauseComponent() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [error, setError] = useState("");
+  const [reloadCauseCard, setReloadCauseCard] = useState(false);
 
   //getting current date
   const currentDate = new Date();
@@ -25,6 +26,23 @@ export default function MyCauseComponent() {
   const formattedCurrentDate = currentDate.toISOString().split("T")[0];
   console.log("Formatted Current Date:", formattedCurrentDate);
 
+  const currentTime = new Date();
+  const currentHours = currentTime.getHours();
+  const currentMinutes = currentTime.getMinutes();
+  const currentTotalMinutes = currentHours * 60 + currentMinutes;
+
+
+  const userInputTime = time;
+  const userInputHours = parseInt(userInputTime.split(":")[0]);
+  const userInputMinutes = parseInt(userInputTime.split(":")[1]);
+  const userInputTotalMinutes = userInputHours * 60 + userInputMinutes; 
+
+
+  console.log("Current Time:", currentTime);
+  console.log("User Input Time", time);
+
+
+  const {id} = useSelector((state) => state.userLogin.userInfo);
   const dispatch = useDispatch();
 
   const validateAddForm = () => {
@@ -74,7 +92,11 @@ export default function MyCauseComponent() {
     } else if (time === "") {
       setError("Time is not supposed to be empty");
       return false;
-    } else if (startDate === "") {
+    } else if(userInputTotalMinutes < currentTotalMinutes){
+      setError("Time cannot be in the past");
+      return false
+    }
+    else if (startDate === "") {
       setError("Start Date is not supposed to be empty");
       return false;
     } else if (startDate < formattedCurrentDate) {
@@ -109,8 +131,11 @@ export default function MyCauseComponent() {
           time,
           startDate,
           endDate,
+          userId: id,
         })
       ).then((response) => {
+        setReloadCauseCard(!reloadCauseCard);
+        console.log(reloadCauseCard, "k xa tw reload cause card")
         setAddCausePopup(false);
         toast.success(response.payload.message, {
           position: "top-right",
@@ -137,164 +162,81 @@ export default function MyCauseComponent() {
         >
           + Add New Cause
         </button>
-      </div>
-      <div className="flex gap-6">
-        <div className="border p-4 mb-4 rounded-md shadow">
-          <div className="flex justify-between">
-            <p className="text-xl font-medium tracking-wider">
-              Cloth Distribution Campaign
-            </p>
-            <button
-              className="hover:underline text-lg ml-28 tracking-wider"
-              onClick={() => setEditPopup(true)}
-            >
-              Edit
-            </button>
-          </div>
-          {editPopup ? (
-            <div className="fixed top-0 left-0 h-full w-full flex justify-center items-center">
-              <div className="rounded-md shadow p-6 border bg-white w-[30%]">
-                <div className="flex justify-between mb-6">
-                  <div></div>
-                  <RxCross1 onClick={() => setEditPopup(false)} />
-                </div>
-                <div>
-                  <form action="" className="flex flex-col gap-4">
-                    <input
-                      type="text"
-                      placeholder="Please Enter Cause Name"
-                      className="px-4 py-2 border"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Please Enter Place Name"
-                      className="px-4 py-2 border"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Please Enter Cause Description"
-                      className="px-4 py-2 border"
-                    />
-                    <input
-                      type="date"
-                      placeholder="Please Enter Deadline For Collaboration"
-                      className="px-4 py-2 border"
-                    />
-                    <input type="time" className="px-4 py-2 border" />
-                    <label htmlFor="">Start Date:</label>
-                    <input
-                      type="date"
-                      placeholder="Please Enter Start Date"
-                      className="px-4 py-2 border"
-                    />
-                    <label htmlFor="">End Date:</label>
-                    <input
-                      type="date"
-                      placeholder="Please Enter End Date"
-                      className="px-4 py-2 border"
-                    />
-
-                    <button className="bg-custom_blue text-white py-2 mt-4">
-                      Update Cause
-                    </button>
-                  </form>
-                </div>
+        {addCausePopup ? (
+          <div className="fixed top-0 left-0 h-full w-full flex justify-center items-center">
+            <div className="rounded-md shadow p-6 border bg-white w-[30%]">
+              <div className="flex justify-between mb-6">
+                <div></div>
+                <RxCross1 onClick={() => setAddCausePopup(false)} />
               </div>
-            </div>
-          ) : null}
-          {addCausePopup ? (
-            <div className="fixed top-0 left-0 h-full w-full flex justify-center items-center">
-              <div className="rounded-md shadow p-6 border bg-white w-[30%]">
-                <div className="flex justify-between mb-6">
-                  <div></div>
-                  <RxCross1 onClick={() => setAddCausePopup(false)} />
-                </div>
-                <div>
-                  <form
-                    action=""
-                    className="flex flex-col gap-4"
-                    onSubmit={handleAddCause}
+              <div>
+                <form
+                  action=""
+                  className="flex flex-col gap-4"
+                  onSubmit={handleAddCause}
+                >
+                  {error ? <p className="text-red-600">{error}</p> : ""}
+                  <input
+                    type="text"
+                    placeholder="Please Enter Cause Name"
+                    className="px-4 py-2 border"
+                    onChange={(e) => setCauseName(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Please Enter Place Name"
+                    className="px-4 py-2 border"
+                    onChange={(e) => setPlaceName(e.target.value)}
+                  />
+                  <textarea
+                    type="text"
+                    rows="3"
+                    cols="40"
+                    placeholder="Please Enter Cause Description"
+                    className="px-4 py-2 border"
+                    onChange={(e) => setCauseDescription(e.target.value)}
+                  />
+                  <label htmlFor="">Application Deadline:</label>
+                  <input
+                    type="date"
+                    placeholder="Please Enter Deadline For Collaboration"
+                    className="px-4 py-2 border"
+                    onChange={(e) =>
+                      setCollaborationApplicationDeadline(e.target.value)
+                    }
+                  />
+                  <input
+                    type="time"
+                    className="px-4 py-2 border"
+                    onChange={(e) => setTime(e.target.value)}
+                  />
+                  <label htmlFor="">Start Date:</label>
+                  <input
+                    type="date"
+                    placeholder="Please Enter Start Date"
+                    className="px-4 py-2 border"
+                    onChange={(e) => setStartDate(e.target.value)}
+                  />
+                  <label htmlFor="">End Date:</label>
+                  <input
+                    type="date"
+                    placeholder="Please Enter End Date"
+                    className="px-4 py-2 border"
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                  <button
+                    type="submit"
+                    className="bg-custom_blue text-white py-2 mt-4"
                   >
-                    {error ? <p className="text-red-600">{error}</p> : ""}
-                    <input
-                      type="text"
-                      placeholder="Please Enter Cause Name"
-                      className="px-4 py-2 border"
-                      onChange={(e) => setCauseName(e.target.value)}
-                    />
-                    <input
-                      type="text"
-                      placeholder="Please Enter Place Name"
-                      className="px-4 py-2 border"
-                      onChange={(e) => setPlaceName(e.target.value)}
-                    />
-                    <textarea
-                      type="text"
-                      rows="3"
-                      cols="40"
-                      placeholder="Please Enter Cause Description"
-                      className="px-4 py-2 border"
-                      onChange={(e) => setCauseDescription(e.target.value)}
-                    />
-                    <label htmlFor="">Application Deadline:</label>
-                    <input
-                      type="date"
-                      placeholder="Please Enter Deadline For Collaboration"
-                      className="px-4 py-2 border"
-                      onChange={(e) =>
-                        setCollaborationApplicationDeadline(e.target.value)
-                      }
-                    />
-                    <input
-                      type="time"
-                      className="px-4 py-2 border"
-                      onChange={(e) => setTime(e.target.value)}
-                    />
-                    <label htmlFor="">Start Date:</label>
-                    <input
-                      type="date"
-                      placeholder="Please Enter Start Date"
-                      className="px-4 py-2 border"
-                      onChange={(e) => setStartDate(e.target.value)}
-                    />
-                    <label htmlFor="">End Date:</label>
-                    <input
-                      type="date"
-                      placeholder="Please Enter End Date"
-                      className="px-4 py-2 border"
-                      onChange={(e) => setEndDate(e.target.value)}
-                    />
-                    <button
-                      type="submit"
-                      className="bg-custom_blue text-white py-2 mt-4"
-                    >
-                      Add Cause
-                    </button>
-                  </form>
-                </div>
+                    Add Cause
+                  </button>
+                </form>
               </div>
             </div>
-          ) : null}
-          <div className="flex mt-4">
-            <span>April 14, 2024</span>
-            <span className="ml-4">Dharan</span>
           </div>
-        </div>
-        <div className="border p-4 mb-4 rounded-md shadow">
-          <div className="flex justify-between">
-            <p className="text-xl font-medium tracking-wider">
-              Blood Donation Campaign
-            </p>
-            <button className="hover:underline text-lg ml-28 tracking-wider">
-              Edit
-            </button>
-          </div>
-          <div className="flex mt-4">
-            <span>April 14, 2024</span>
-            <span className="ml-4">Dharan</span>
-          </div>
-        </div>
+        ) : null}
       </div>
+      <CauseListComponent reloadCauseCard={reloadCauseCard}/>
     </div>
   );
 }
