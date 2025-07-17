@@ -33,25 +33,19 @@ class CauseController {
       .status(201)
       .json(new ApiResponse.ApiRes(201, newCause, "Cause added successfully"));
   });
-  async getCauses(req, res) {
-    try {
+
+
+ getCauses = asyncWrapper( async (req, res) => {
       const causes = await Cause.find();
       if (!causes || causes.length === 0) {
-        return res.status(404).json({
-          message: "No causes found!!!",
-        });
+        throw new ApiError.ApiError(404, "No causes found!!!", null, false);
       }
       res
         .status(200)
         .json(
           new ApiResponse.ApiRes(200, causes, "Causes fetched successfully")
         );
-    } catch (err) {
-      res.status(500).json({
-        message: "Something went wrong",
-      });
-    }
-  }
+  });
 }
 
 module.exports = CauseController;
