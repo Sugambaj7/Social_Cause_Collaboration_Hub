@@ -15,7 +15,7 @@ export const addCause = createAsyncThunk('causes/addCause', async(causeData, { r
       formData.append("userId", causeData.userId);
 
       
-      const response = await axiosURL.post('cause/addCause', formData
+      const response = await axiosURL.post('causes/addCause', formData
       );
       return response?.data;
       
@@ -25,9 +25,10 @@ export const addCause = createAsyncThunk('causes/addCause', async(causeData, { r
    }
 });
 
-export const getCauses = createAsyncThunk('causes/getCauses', async() => {
+export const getCausesByUserId = createAsyncThunk('causes/getCausesByUserId', async(userId) => {
+   // console.log(userId, "I am from cause Slice.js");
    try{
-      const response = await axiosURL.get('cause/getCauses');
+      const response = await axiosURL.get(`causes/getCausesByUserId/${userId}`);
       return response?.data;
       
    }catch(error) {
@@ -51,18 +52,18 @@ export const getCauses = createAsyncThunk('causes/getCauses', async() => {
      },
      extraReducers: (builder) => {
         builder
-           .addCase(getCauses.pending, (state) => {
+           .addCase(getCausesByUserId.pending, (state) => {
               state.loading = true;
               state.myerror = null;
               state.success = false;
            })
-           .addCase(getCauses.fulfilled, (state, action) => {
+           .addCase(getCausesByUserId.fulfilled, (state, action) => {
               state.loading = false;
               state.myerror = null;
               state.success = true;
               state.data = action.payload;
            })
-           .addCase(getCauses.rejected, (state, action) => {
+           .addCase(getCausesByUserId.rejected, (state, action) => {
               state.loading = false;
               state.myerror = action.payload;
               state.success = false;

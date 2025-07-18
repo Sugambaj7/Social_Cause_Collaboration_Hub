@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCauses } from "../features/causes/causeSlice";
+import { getCausesByUserId } from "../features/causes/causeSlice";
 import CauseCardComponent from "./CauseCardComponent";
 
 export default function CauseListComponent({reloadCauseCard}) {
 
   const dispatch = useDispatch();
   const {success} = useSelector((state) => state.cause);
+  const {id} = useSelector((state) => state.userLogin.userInfo);
+
 
   useEffect(() => {
-    dispatch(getCauses());
+    dispatch(getCausesByUserId(id));
   }, [reloadCauseCard]);
 
 
