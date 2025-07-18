@@ -29,9 +29,13 @@ class CauseController {
     });
 
     await newCause.save();
+
     res
       .status(201)
       .json(new ApiResponse.ApiRes(201, newCause, "Cause added successfully"));
+
+    next();
+
   });
 
 

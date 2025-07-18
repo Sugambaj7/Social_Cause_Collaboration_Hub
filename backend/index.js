@@ -3,6 +3,7 @@ const cors = require("cors");
 const app = express();
 const webRouter = require("./router");
 const connectDB = require("./config/db");
+const globalErrorHandler = require("./utils/globalErrorHandler");
 require("dotenv").config();
 
 const port = process.env.PORT;
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(webRouter);
+app.use(globalErrorHandler);
 
 console.log(port, "port vayo");
 
