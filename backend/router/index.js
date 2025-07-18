@@ -5,6 +5,6 @@ const causeRouter = require("./causeRouter");
 const webRouter = express.Router();
 
 webRouter.use("/user", userRouter);
-webRouter.use("/cause", causeRouter);
+webRouter.use("/causes", causeRouter);
 
 module.exports = webRouter;

@@ -39,8 +39,10 @@ class CauseController {
   });
 
 
- getCauses = asyncWrapper( async (req, res) => {
-      const causes = await Cause.find();
+ getCausesByUserId = asyncWrapper( async (req, res) => {
+      const userId = req.params.userId;
+
+      const causes = await Cause.find({ userId: userId });
       if (!causes || causes.length === 0) {
         throw new ApiError.ApiError(404, "No causes found!!!", null, false);
       }
