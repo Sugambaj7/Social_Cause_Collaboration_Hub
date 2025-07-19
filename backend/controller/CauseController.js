@@ -49,6 +49,19 @@ class CauseController {
       res
         .status(200)
         .json(
+          new ApiResponse.ApiRes(200, causes, "My Causes fetched successfully")
+        );
+  });
+
+   getCauses = asyncWrapper( async (req, res) => {
+
+      const causes = await Cause.find();
+      if (!causes || causes.length === 0) {
+        throw new ApiError.ApiError(404, "No causes found!!!", null, false);
+      }
+      res
+        .status(200)
+        .json(
           new ApiResponse.ApiRes(200, causes, "Causes fetched successfully")
         );
   });

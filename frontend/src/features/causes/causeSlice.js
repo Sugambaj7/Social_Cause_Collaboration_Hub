@@ -37,11 +37,25 @@ export const getCausesByUserId = createAsyncThunk('causes/getCausesByUserId', as
    }
   });
 
+
+  export const getAllCauses = createAsyncThunk('causes/getCauses', async() => {
+   // console.log(userId, "I am from cause Slice.js");
+   try{
+      const response = await axiosURL.get("causes/getCauses");
+      return response?.data;
+      
+   }catch(error) {
+      console.error("Error in getCauses:", error);
+      return rejectWithValue(error.response?.data?.message || error.message);
+   }
+  });
+
   const initialState = {
      loading: false,
      myerror: null,
      success: false,
-     data: null
+     myCauses: null,
+     allCauses: null
   };
 
   const causeSlice = createSlice({
@@ -61,9 +75,26 @@ export const getCausesByUserId = createAsyncThunk('causes/getCausesByUserId', as
               state.loading = false;
               state.myerror = null;
               state.success = true;
-              state.data = action.payload;
+              state.myCauses = action.payload;
            })
            .addCase(getCausesByUserId.rejected, (state, action) => {
+              state.loading = false;
+              state.myerror = action.payload;
+              state.success = false;
+           })
+
+           .addCase(getAllCauses.pending, (state) => {
+              state.loading = true;
+              state.myerror = null;
+              state.success = false;
+           })
+           .addCase(getAllCauses.fulfilled, (state, action) => {
+              state.loading = false;
+              state.myerror = null;
+              state.success = true;
+              state.allCauses = action.payload;
+           })
+           .addCase(getAllCauses.rejected, (state, action) => {
               state.loading = false;
               state.myerror = action.payload;
               state.success = false;

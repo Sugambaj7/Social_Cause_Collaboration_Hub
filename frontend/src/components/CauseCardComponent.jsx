@@ -5,14 +5,14 @@ import { useSelector } from "react-redux";
 const CauseCardComponent = () => {
   const [editPopup, setEditPopup] = useState(false);
 
-  const { loading, myerror, success, data } = useSelector(
+  const { loading, myerror, success, myCauses } = useSelector(
     (state) => state.cause
   );
   
 
   return (
     <>
-      {data?.data !== null ? data?.data?.map((cause, index) => (
+      {myCauses?.data !== null ? myCauses?.data?.map((cause, index) => (
         <div key={index}>
           <div className="bg-custom_gradient text-gray-50 border p-8 mb-4 rounded-md shadow">
              <div className="flex justify-between">

@@ -7,6 +7,7 @@ const CauseController = require('../controller/CauseController.js');
 const CauseControllerInstance = new CauseController();
 
 causeRouter.post('/addCause', upload.none(), CauseControllerInstance.addCause);
+causeRouter.get('/getCauses', CauseControllerInstance.getCauses);
 causeRouter.get('/getCausesByUserId/:userId', CauseControllerInstance.getCausesByUserId);
 
 module.exports = causeRouter;
