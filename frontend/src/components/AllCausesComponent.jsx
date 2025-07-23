@@ -20,13 +20,13 @@ export default function AllCausesComponent() {
       </h3>
       <div className="flex gap-6">
         {allCauses?.data?.map((cause, index) => (
-          <div key={index} className="border p-6 mb-4 shadow rounded-md">
+          <div key={index} className="border p-6 mb-4 shadow rounded-md cursor-pointer">
             <p className="text-xl font-medium tracking-wider">
               {cause.causeName}
             </p>
             <div className="flex mt-4 mb-2">
               <span>{cause.startDate.split("T")[0]}</span>
-              <span className="ml-4">{cause.placeName}</span>
+              <span className="ml-10">{cause.placeName}</span>
             </div>
           </div>
         ))}

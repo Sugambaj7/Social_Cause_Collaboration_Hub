@@ -4,10 +4,17 @@ import { RxCross1 } from "react-icons/rx";
 import { useSelector } from "react-redux";
 const CauseCardComponent = () => {
   const [editPopup, setEditPopup] = useState(false);
+  const [currentCause, setCurrentCause] = useState(null);
 
   const { loading, myerror, success, myCauses } = useSelector(
     (state) => state.cause
   );
+
+  const handleEditClick = (cause) => () => {
+    setEditPopup(true);
+    setCurrentCause(cause);
+  };
+ 
   
 
   return (
@@ -21,7 +28,7 @@ const CauseCardComponent = () => {
             </p>
             <button
               className="hover:underline text-lg ml-28 tracking-wider"
-              onClick={() => setEditPopup(true)}
+              onClick={handleEditClick(cause)}
             >
               Edit
             </button>
@@ -44,34 +51,40 @@ const CauseCardComponent = () => {
                       type="text"
                       placeholder="Please Enter Cause Name"
                       className="px-4 py-2 border"
+                      value={currentCause?.causeName}
                     />
                     <input
                       type="text"
                       placeholder="Please Enter Place Name"
                       className="px-4 py-2 border"
+                      value={currentCause?.placeName}
                     />
                     <input
                       type="text"
                       placeholder="Please Enter Cause Description"
                       className="px-4 py-2 border"
+                      value={currentCause?.causeDescription}
                     />
                     <input
                       type="date"
                       placeholder="Please Enter Deadline For Collaboration"
                       className="px-4 py-2 border"
+                      value={currentCause?.collaborationApplicationDeadline}
                     />
-                    <input type="time" className="px-4 py-2 border" />
+                    <input type="time" className="px-4 py-2 border" value={currentCause?.time}/>
                     <label htmlFor="">Start Date:</label>
                     <input
                       type="date"
                       placeholder="Please Enter Start Date"
                       className="px-4 py-2 border"
+                      value={currentCause?.startDate?.slice(0, 10)}
                     />
                     <label htmlFor="">End Date:</label>
                     <input
                       type="date"
                       placeholder="Please Enter End Date"
                       className="px-4 py-2 border"
+                      value={currentCause?.endDate?.slice(0, 10)}
                     />
 
                     <button className="bg-custom_blue text-white py-2 mt-4">
