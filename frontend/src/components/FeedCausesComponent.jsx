@@ -1,11 +1,10 @@
-import React from "react";
-import MyCauseComponent from "./MyCauseComponent";
 import AllCausesComponent from "./AllCausesComponent";
+import MyAddCauseComponent from "./MyAddCauseComponent";
 
 export default function FeedCausesComponent() {
   return (
     <div className= "mx-16">
-      <MyCauseComponent />
+      <MyAddCauseComponent />
       <AllCausesComponent />
     </div>
   );

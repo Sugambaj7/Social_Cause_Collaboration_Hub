@@ -1,4 +1,3 @@
-import React from "react";
 import { FaRegCopyright } from "react-icons/fa";
 
 export default function FooterComponent() {

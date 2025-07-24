@@ -9,5 +9,6 @@ const CauseControllerInstance = new CauseController();
 causeRouter.post('/addCause', upload.none(), CauseControllerInstance.addCause);
 causeRouter.get('/getCauses', CauseControllerInstance.getCauses);
 causeRouter.get('/getCausesByUserId/:userId', CauseControllerInstance.getCausesByUserId);
+causeRouter.put('/updateCauseById/:causeId', CauseControllerInstance.updateCauseById);
 
 module.exports = causeRouter;

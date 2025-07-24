@@ -1,4 +1,3 @@
-import React from "react";
 import { MdPersonAddAlt1 } from "react-icons/md";
 import { FaUserFriends } from "react-icons/fa";
 import { FaRegHandshake } from "react-icons/fa6";

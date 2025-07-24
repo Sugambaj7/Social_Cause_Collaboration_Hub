@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { RxCross1 } from "react-icons/rx";
 import CauseListComponent from "./CauseListComponent";
 
-export default function MyCauseComponent() {
+export default function MyAddCauseComponent() {
   const [addCausePopup, setAddCausePopup] = useState(false);
   const [causeName, setCauseName] = useState("");
   const [placeName, setPlaceName] = useState("");
@@ -31,18 +31,15 @@ export default function MyCauseComponent() {
   const currentMinutes = currentTime.getMinutes();
   const currentTotalMinutes = currentHours * 60 + currentMinutes;
 
-
   const userInputTime = time;
   const userInputHours = parseInt(userInputTime.split(":")[0]);
   const userInputMinutes = parseInt(userInputTime.split(":")[1]);
-  const userInputTotalMinutes = userInputHours * 60 + userInputMinutes; 
-
+  const userInputTotalMinutes = userInputHours * 60 + userInputMinutes;
 
   console.log("Current Time:", currentTime);
   console.log("User Input Time", time);
 
-
-  const {id} = useSelector((state) => state.userLogin.userInfo);
+  const { id } = useSelector((state) => state.userLogin.userInfo);
   const dispatch = useDispatch();
 
   const validateAddForm = () => {
@@ -92,11 +89,10 @@ export default function MyCauseComponent() {
     } else if (time === "") {
       setError("Time is not supposed to be empty");
       return false;
-    } else if(userInputTotalMinutes < currentTotalMinutes){
+    } else if (userInputTotalMinutes < currentTotalMinutes) {
       setError("Time cannot be in the past");
-      return false
-    }
-    else if (startDate === "") {
+      return false;
+    } else if (startDate === "") {
       setError("Start Date is not supposed to be empty");
       return false;
     } else if (startDate < formattedCurrentDate) {
@@ -134,17 +130,27 @@ export default function MyCauseComponent() {
           userId: id,
         })
       ).then((response) => {
-        setReloadCauseCard(!reloadCauseCard);
-        console.log(reloadCauseCard, "k xa tw reload cause card")
-        setAddCausePopup(false);
-        toast.success(response.payload.message, {
-          position: "top-right",
-          autoClose: 5000,
-          pauseOnHover: true,
-          progress: undefined,
-          theme: "light",
-          border: "1px solid black",
-        });
+        if (response.payload.success) {
+          setReloadCauseCard(!reloadCauseCard);
+          setAddCausePopup(false);
+          toast.success(response.payload.message, {
+            position: "top-right",
+            autoClose: 5000,
+            pauseOnHover: true,
+            progress: undefined,
+            theme: "light",
+            border: "1px solid black",
+          });
+        } else {
+          toast.error(response.payload.message, {
+            position: "top-right",
+            autoClose: 5000,
+            pauseOnHover: true,
+            progress: undefined,
+            theme: "light",
+            border: "1px solid black",
+          });
+        }
       });
     }
   };
@@ -236,7 +242,7 @@ export default function MyCauseComponent() {
           </div>
         ) : null}
       </div>
-      <CauseListComponent reloadCauseCard={reloadCauseCard}/>
+      <CauseListComponent />
     </div>
   );
 }

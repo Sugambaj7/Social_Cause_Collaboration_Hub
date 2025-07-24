@@ -18,7 +18,7 @@ export default function AllCausesComponent() {
       <h3 className="text-2xl font-semibold mt-4 mb-6 tracking-wider">
         All Causes
       </h3>
-      <div className="flex gap-6">
+      <div className="flex flex-wrap gap-6">
         {allCauses?.data?.map((cause, index) => (
           <div key={index} className="border p-6 mb-4 shadow rounded-md cursor-pointer">
             <p className="text-xl font-medium tracking-wider">

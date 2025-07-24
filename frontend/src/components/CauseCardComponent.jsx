@@ -1,22 +1,15 @@
 import React, { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
-import { useSelector } from "react-redux";
+import { updateCauseById } from "../features/causes/causeSlice";
+
 const CauseCardComponent = () => {
   const [editPopup, setEditPopup] = useState(false);
   const [currentCause, setCurrentCause] = useState(null);
-  // const [causeName, setCauseName] = useState("");
-  // const [placeName, setPlaceName] = useState("");
-  // const [causeDescription, setCauseDescription] = useState("");
-  // const [
-  //   collaborationApplicationDeadline,
-  //   setCollaborationApplicationDeadline,
-  // ] = useState("");
-  // const [time, setTime] = useState("");
-  // const [startDate, setStartDate] = useState("");
-  // const [endDate, setEndDate] = useState("");
   const [error, setError] = useState("");
-  console.log(error, "error in CauseCardComponent");
+
 
   const currentDate = new Date();
   console.log("Current Date:", currentDate);
@@ -36,12 +29,16 @@ const CauseCardComponent = () => {
   console.log("Current Time:", currentTime);
   console.log("User Input Time", currentCause?.time);
 
+  const dispatch = useDispatch();
 
-    const validateUpdateForm = () => {
+  const validateUpdateForm = () => {
     if (currentCause.causeName === "") {
       setError("Cause Name is not supposed to be empty");
       return false;
-    } else if (currentCause.causeName.length < 8 || currentCause.causeName.length > 50) {
+    } else if (
+      currentCause.causeName.length < 8 ||
+      currentCause.causeName.length > 50
+    ) {
       setError(
         "Cause Name should be at least 8 characters long and maximum 50 characters long"
       );
@@ -54,12 +51,17 @@ const CauseCardComponent = () => {
     } else if (currentCause.placeName === "") {
       setError("Place Name is not supposed to be empty");
       return false;
-    } else if (currentCause.placeName.length < 2 || currentCause.placeName.length > 25) {
+    } else if (
+      currentCause.placeName.length < 2 ||
+      currentCause.placeName.length > 25
+    ) {
       setError(
         "Place Name should be at least 2 characters long and maximum 25 characters long"
       );
       return false;
-    } else if (!/^[A-Za-z]+(?:\s*,\s*[A-Za-z]+)*$/.test(currentCause.placeName)) {
+    } else if (
+      !/^[A-Za-z]+(?:\s*,\s*[A-Za-z]+)*$/.test(currentCause.placeName)
+    ) {
       setError(
         "Place Name should not contain special characters, numbers except spaces and comma "
       );
@@ -67,34 +69,42 @@ const CauseCardComponent = () => {
     } else if (currentCause.causeDescription === "") {
       setError("Cause Description is not supposed to be empty");
       return false;
-    } else if (currentCause.causeDescription.length < 10 || currentCause.causeDescription.length > 200) {
+    } else if (
+      currentCause.causeDescription.length < 10 ||
+      currentCause.causeDescription.length > 200
+    ) {
       setError(
         "Cause Description should be at least 10 characters long and maximum 200 characters long"
       );
       return false;
-    } else if (!/^[A-Za-z0-9.,!?'"()&%\- ]+$/.test(currentCause.causeDescription)) {
+    } else if (
+      !/^[A-Za-z0-9.,!?'"()&%\- ]+$/.test(currentCause.causeDescription)
+    ) {
       setError("Invalid Cause Description");
       return false;
     } else if (currentCause.collaborationApplicationDeadline === "") {
       setError("Collaboration Deadline is not supposed to be empty");
       return false;
-    } else if (currentCause.collaborationApplicationDeadline < formattedCurrentDate) {
+    } else if (
+      currentCause.collaborationApplicationDeadline < formattedCurrentDate
+    ) {
       setError("Application Deadline cannot be in the past");
       return false;
     } else if (currentCause.time === "") {
       setError("Time is not supposed to be empty");
       return false;
-    } else if(userInputTotalMinutes < currentTotalMinutes){
+    } else if (userInputTotalMinutes < currentTotalMinutes) {
       setError("Time cannot be in the past");
-      return false
-    }
-    else if (currentCause.startDate === "") {
+      return false;
+    } else if (currentCause.startDate === "") {
       setError("Start Date is not supposed to be empty");
       return false;
     } else if (currentCause.startDate < formattedCurrentDate) {
       setError("Start Date cannot be in the past");
       return false;
-    } else if (currentCause.startDate < currentCause.collaborationApplicationDeadline) {
+    } else if (
+      currentCause.startDate < currentCause.collaborationApplicationDeadline
+    ) {
       setError(
         "Start Date cannot be before the Application for collaboration Deadline"
       );
@@ -111,7 +121,6 @@ const CauseCardComponent = () => {
     }
   };
 
-
   const { loading, myerror, success, myCauses } = useSelector(
     (state) => state.cause
   );
@@ -121,16 +130,37 @@ const CauseCardComponent = () => {
     setCurrentCause(cause);
   };
 
-
-  
-const {id} = useSelector((state) => state.userLogin.userInfo);
+  const { id } = useSelector((state) => state.userLogin.userInfo);
 
   const handleUpdate = (causeId) => (e) => {
-    console.log(causeId, currentCause, "causeId and current cause");
     e.preventDefault();
-        if (validateUpdateForm()) {
-          
+    if (validateUpdateForm()) {
+      dispatch(updateCauseById({ causeId: causeId, causeData: currentCause }))
+      .then(
+        (response) => {
+          if (response.payload.success) {
+            setEditPopup(false);
+            toast.success(response.payload.message, {
+              position: "top-right",
+              autoClose: 5000,
+              pauseOnHover: true,
+              progress: undefined,
+              theme: "light",
+              border: "1px solid black",
+            });
+          } else {
+            toast.error(response.payload.message, {
+              position: "top-right",
+              autoClose: 5000,
+              pauseOnHover: true,
+              progress: undefined,
+              theme: "light",
+              border: "1px solid black",
+            });
+          }
         }
+      );
+    }
   };
 
   return (
@@ -174,14 +204,24 @@ const {id} = useSelector((state) => state.userLogin.userInfo);
                         placeholder="Please Enter Cause Name"
                         className="px-4 py-2 border"
                         value={currentCause?.causeName}
-                        onChange={(e) => setCurrentCause({ ...currentCause, causeName: e.target.value })}
+                        onChange={(e) =>
+                          setCurrentCause({
+                            ...currentCause,
+                            causeName: e.target.value,
+                          })
+                        }
                       />
                       <input
                         type="text"
                         placeholder="Please Enter Place Name"
                         className="px-4 py-2 border"
                         value={currentCause?.placeName}
-                        onChange={(e) => setCurrentCause({ ...currentCause, placeName: e.target.value })}
+                        onChange={(e) =>
+                          setCurrentCause({
+                            ...currentCause,
+                            placeName: e.target.value,
+                          })
+                        }
                       />
                       <textarea
                         placeholder="Please Enter Cause Description"
@@ -189,7 +229,12 @@ const {id} = useSelector((state) => state.userLogin.userInfo);
                         cols="50"
                         className="px-4 py-2 border"
                         value={currentCause?.causeDescription}
-                        onChange={(e) => setCurrentCause({ ...currentCause, causeDescription: e.target.value })}
+                        onChange={(e) =>
+                          setCurrentCause({
+                            ...currentCause,
+                            causeDescription: e.target.value,
+                          })
+                        }
                       />
                       <input
                         type="date"
@@ -197,14 +242,22 @@ const {id} = useSelector((state) => state.userLogin.userInfo);
                         className="px-4 py-2 border"
                         value={currentCause?.collaborationApplicationDeadline}
                         onChange={(e) =>
-                          setCurrentCause({ ...currentCause, collaborationApplicationDeadline: e.target.value })
+                          setCurrentCause({
+                            ...currentCause,
+                            collaborationApplicationDeadline: e.target.value,
+                          })
                         }
                       />
                       <input
                         type="time"
                         className="px-4 py-2 border"
                         value={currentCause?.time}
-                        onChange={(e) => setCurrentCause({ ...currentCause, time: e.target.value })}
+                        onChange={(e) =>
+                          setCurrentCause({
+                            ...currentCause,
+                            time: e.target.value,
+                          })
+                        }
                       />
                       <label htmlFor="">Start Date:</label>
                       <input
@@ -212,7 +265,12 @@ const {id} = useSelector((state) => state.userLogin.userInfo);
                         placeholder="Please Enter Start Date"
                         className="px-4 py-2 border"
                         value={currentCause?.startDate?.slice(0, 10)}
-                        onChange={(e) => setCurrentCause({ ...currentCause, startDate: e.target.value })}
+                        onChange={(e) =>
+                          setCurrentCause({
+                            ...currentCause,
+                            startDate: e.target.value,
+                          })
+                        }
                       />
                       <label htmlFor="">End Date:</label>
                       <input
@@ -220,7 +278,12 @@ const {id} = useSelector((state) => state.userLogin.userInfo);
                         placeholder="Please Enter End Date"
                         className="px-4 py-2 border"
                         value={currentCause?.endDate?.slice(0, 10)}
-                        onChange={(e) => setCurrentCause({ ...currentCause, endDate: e.target.value })}
+                        onChange={(e) =>
+                          setCurrentCause({
+                            ...currentCause,
+                            endDate: e.target.value,
+                          })
+                        }
                       />
                       <button
                         type="submit"

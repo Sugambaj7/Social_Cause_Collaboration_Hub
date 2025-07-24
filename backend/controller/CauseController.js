@@ -35,35 +35,59 @@ class CauseController {
       .json(new ApiResponse.ApiRes(201, newCause, "Cause added successfully"));
 
     next();
-
   });
 
+  getCausesByUserId = asyncWrapper(async (req, res) => {
+    const userId = req.params.userId;
 
- getCausesByUserId = asyncWrapper( async (req, res) => {
-      const userId = req.params.userId;
-
-      const causes = await Cause.find({ userId: userId });
-      if (!causes || causes.length === 0) {
-        throw new ApiError.ApiError(404, "No causes found!!!", null, false);
-      }
-      res
-        .status(200)
-        .json(
-          new ApiResponse.ApiRes(200, causes, "My Causes fetched successfully")
-        );
+    const causes = await Cause.find({ userId: userId });
+    if (!causes || causes.length === 0) {
+      throw new ApiError.ApiError(404, "No causes found!!!", null, false);
+    }
+    res
+      .status(200)
+      .json(
+        new ApiResponse.ApiRes(200, causes, "My Causes fetched successfully")
+      );
   });
 
-   getCauses = asyncWrapper( async (req, res) => {
+  getCauses = asyncWrapper(async (req, res) => {
+    const causes = await Cause.find();
+    if (!causes || causes.length === 0) {
+      throw new ApiError.ApiError(404, "No causes found!!!", null, false);
+    }
+    res
+      .status(200)
+      .json(new ApiResponse.ApiRes(200, causes, "Causes fetched successfully"));
+  });
 
-      const causes = await Cause.find();
-      if (!causes || causes.length === 0) {
-        throw new ApiError.ApiError(404, "No causes found!!!", null, false);
+  updateCauseById = asyncWrapper(async (req, res) => {
+
+    const causeId = req.params.causeId;
+
+    const updatedCause = await Cause.findOneAndUpdate(
+      {
+        _id: causeId,
+      },
+      req.body,
+      {
+        new: true,
       }
-      res
-        .status(200)
-        .json(
-          new ApiResponse.ApiRes(200, causes, "Causes fetched successfully")
-        );
+    );
+
+    if (!updatedCause) {
+      throw new ApiError.ApiError(404, "Unable to update cause", null, false);
+    }
+    res
+      .status(200)
+      .json(
+        new ApiResponse.ApiRes(
+          200,
+          updatedCause,
+          "Cause updated successfully",
+          true
+        )
+      );
   });
 }
 
