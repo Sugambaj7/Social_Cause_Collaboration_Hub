@@ -15,7 +15,7 @@ export default function CauseListComponent() {
 
 
   return (
-    <div className="flex flex-wrap gap-6">
+    <div className="my-cause-list flex flex-wrap gap-6">
       <CauseCardComponent />
       </div>
   );

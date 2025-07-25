@@ -18,7 +18,6 @@ export default function MyAddCauseComponent() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [error, setError] = useState("");
-  const [reloadCauseCard, setReloadCauseCard] = useState(false);
 
   //getting current date
   const currentDate = new Date();
@@ -130,8 +129,8 @@ export default function MyAddCauseComponent() {
           userId: id,
         })
       ).then((response) => {
+        console.log(response, "I am from MyAddCauseComponent");
         if (response.payload.success) {
-          setReloadCauseCard(!reloadCauseCard);
           setAddCausePopup(false);
           toast.success(response.payload.message, {
             position: "top-right",
@@ -169,7 +168,7 @@ export default function MyAddCauseComponent() {
           + Add New Cause
         </button>
         {addCausePopup ? (
-          <div className="fixed top-0 left-0 h-full w-full flex justify-center items-center">
+          <div className="add-cause-popup fixed top-0 left-0 h-full w-full flex justify-center items-center">
             <div className="rounded-md shadow p-6 border bg-white w-[30%]">
               <div className="flex justify-between mb-6">
                 <div></div>

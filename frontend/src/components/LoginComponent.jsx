@@ -68,7 +68,7 @@ export default function LoginComponent() {
   return (
     <div className="w-full flex justify-between mt-24 mb-36">
       <div></div>
-      <div className="h-full w-[35%]">
+      <div className="login-form h-full w-[35%]">
         <form action="" onSubmit={submitHandler}>
           <h2 className="text-3xl">SIGN IN</h2>
           {myerror && (

@@ -70,12 +70,23 @@ export const updateCauseById = createAsyncThunk(
   }
 );
 
+export const deleteCauseById = createAsyncThunk("causes/deleteCauseById", async(causeId, {rejectWithValue}) => {
+  try{
+    const response = await axiosURL.delete(`causes/deleteCauseById/${causeId}`);
+    console.log(response, "I am from deleteCauseById in causeSlice.js");
+    return response?.data;
+  }catch(error){
+    console.error("Error in deleting cause by ID:", error);
+    return rejectWithValue(error.response?.data?.message || error.message);
+  }
+})
+
 const initialState = {
   loading: false,
   myerror: null,
   success: false,
-  myCauses: null,
-  allCauses: null,
+  myCauses: [],
+  allCauses: [],
 };
 
 const causeSlice = createSlice({
@@ -93,7 +104,7 @@ const causeSlice = createSlice({
         state.loading = false;
         state.myerror = null;
         state.success = true;
-        state.myCauses = action.payload;
+        state.myCauses = action.payload.data;
       })
       .addCase(getCausesByUserId.rejected, (state, action) => {
         state.loading = false;
@@ -110,7 +121,7 @@ const causeSlice = createSlice({
         state.loading = false;
         state.myerror = null;
         state.success = true;
-        state.allCauses = action.payload;
+        state.allCauses = action.payload.data;
       })
       .addCase(getAllCauses.rejected, (state, action) => {
         state.loading = false;
@@ -127,8 +138,8 @@ const causeSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.myerror = null;
-        state.myCauses.data.push(action.payload.data);
-        state.allCauses.data.push(action.payload.data);
+        state.myCauses.push(action.payload.data);
+        state.allCauses.push(action.payload.data);
       })
       .addCase(addCause.rejected, (state, action) => {
         state.loading = false;
@@ -144,7 +155,7 @@ const causeSlice = createSlice({
       .addCase(updateCauseById.fulfilled, (state, action) => {
         state.loading = false;
         const updatedCause = action.payload.data;
-        state.myCauses.data = state.myCauses.data.map((cause) =>
+        state.myCauses = state.myCauses.map((cause) =>
           cause._id === updatedCause._id ? updatedCause : cause
         );
         state.success = false;
@@ -153,7 +164,26 @@ const causeSlice = createSlice({
          state.loading = false;
          state.myerror = action.payload;
          state.success = false;
-      });
+      })
+
+      .addCase(deleteCauseById.pending, (state) => {
+        state.loading = true;
+        state.myerror = null;
+        state.success = false;
+      })
+      .addCase(deleteCauseById.fulfilled, (state, action) => {
+        state.loading = false;
+       const deletedCause = action.payload.data;
+        state.myCauses = state.myCauses.filter(
+          (cause) => cause._id !== deletedCause._id
+        );
+        state.success = true;
+      })
+      .addCase(deleteCauseById.rejected, (state, action) => {
+        state.loading = false;
+        state.myerror = action.payload;
+        state.success = false;
+      })
   },
 });
 

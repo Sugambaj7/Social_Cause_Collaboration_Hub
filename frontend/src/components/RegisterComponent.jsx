@@ -95,7 +95,7 @@ const RegisterComponent = () => {
   return (
     <div className="w-full flex justify-between mt-10 mb-20">
       <div></div>
-      <div className="h-full w-[35%]">
+      <div className="register-form h-full w-[35%]">
         <form action="" onSubmit={submitHandler}>
           <h2 className="text-3xl">SIGN UP</h2>
           {success && msg !== "" && (

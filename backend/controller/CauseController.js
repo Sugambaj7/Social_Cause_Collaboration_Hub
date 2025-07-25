@@ -32,7 +32,7 @@ class CauseController {
 
     res
       .status(201)
-      .json(new ApiResponse.ApiRes(201, newCause, "Cause added successfully"));
+      .json(new ApiResponse.ApiRes(201, newCause, "Cause added successfully", true));
 
     next();
   });
@@ -88,7 +88,21 @@ class CauseController {
           true
         )
       );
-  });
+  })
+
+  deleteCauseById = asyncWrapper(async (req, res) => {
+    const causeId = req.params.causeId;
+
+    const deletedCause = await Cause.findOneAndDelete({ _id: causeId });
+    
+    if(!deletedCause){
+      throw new ApiError.ApiError(404, "Unable to delete cause", null, false);
+    }
+
+    res.status(200).json(
+      new ApiResponse.ApiRes(200, deletedCause, "Cause deleted successfully", true)
+    );
+  })
 }
 
 module.exports = CauseController;
