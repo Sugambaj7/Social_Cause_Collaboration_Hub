@@ -16,7 +16,7 @@ export default function AllCausesComponent() {
   }, [myCauses]);
 
   return (
-    <div className="all-causes mt-9 mb-28">
+    <div className="all-causes mt-14 mb-28">
       <h3 className="text-2xl font-semibold mt-4 mb-6 tracking-wider">
         All Causes
       </h3>

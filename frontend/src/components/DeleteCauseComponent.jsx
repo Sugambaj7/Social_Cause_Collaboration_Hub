@@ -35,7 +35,7 @@ const DeleteCauseComponent = ({ causeId }) => {
   return (
     <div className="delete-cause">
       <button
-        className="hover:underline text-lg tracking-wider"
+        className="bg-red-500 text-white px-4 py-2 rounded-md ml-2"
         onClick={() => handleDelete(causeId)}
       >
         Delete

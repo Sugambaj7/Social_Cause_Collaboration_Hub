@@ -4,8 +4,8 @@ import { FaRegHandshake } from "react-icons/fa6";
 
 export default function GuideComponent() {
   return (
-    <div className="w-[100%] flex justify-center items-center mt-12">
-      <div className="w-[95%] text-center shadow-[0_3px_10px_rgb(0,0,0,0.2)] mb-20">
+    <div className="guide w-[100%] flex justify-center items-center mt-12">
+      <div className="w-[95%] text-center mb-20">
         <div className="mb-12">
           <h3 className="text-2xl font-mono font-bold py-4 mt-4">
             How It Works

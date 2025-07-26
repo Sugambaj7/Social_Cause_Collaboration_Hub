@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCausesByUserId } from "../features/causes/causeSlice";
-import CauseCardComponent from "./CauseCardComponent";
+import MyCausesTableComponent from "./MyCausesTableComponent";
 
 export default function CauseListComponent() {
 
@@ -16,7 +16,7 @@ export default function CauseListComponent() {
 
   return (
     <div className="my-cause-list flex flex-wrap gap-6">
-      <CauseCardComponent />
+      <MyCausesTableComponent />
       </div>
   );
 }
