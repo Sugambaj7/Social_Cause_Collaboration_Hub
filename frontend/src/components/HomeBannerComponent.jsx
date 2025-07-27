@@ -5,7 +5,7 @@ import { TiTickOutline } from "react-icons/ti";
 const HomeBannerComponent = () => {
   const { userInfo } = useSelector((state) => state.userLogin);
   return (
-    <div className="w-full bg-custom_blue flex justify-center items-center h-[35vh]">
+    <div className="home-banner w-full bg-custom_blue flex justify-center items-center h-[35vh]">
       <div className="flex flex-col">
         <p className="text-4xl text-white font-nunito font-extrabold">
           Welcome back! {userInfo?.name}
