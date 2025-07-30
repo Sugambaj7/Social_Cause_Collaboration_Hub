@@ -20,12 +20,11 @@ const MyCausesTableComponent = () => {
     setCurrentCause(cause);
   };
 
- const setCurrentPageNumber = (page) => setCurrentPage(page);
+  const setCurrentPageNumber = (page) => setCurrentPage(page);
 
   const lastCauseIndex = currentPage * causesPerPage;
   const firstCauseIndex = lastCauseIndex - causesPerPage;
   const currentPageCauses = myCauses.slice(firstCauseIndex, lastCauseIndex);
-
 
   return (
     <div className="causes-table w-[100%]">
@@ -92,7 +91,12 @@ const MyCausesTableComponent = () => {
           </tbody>
         </thead>
       </table>
-      <PaginationComponent totalCauses={myCauses.length} numOfCausesPerPage={causesPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
+      <PaginationComponent
+        totalCauses={myCauses.length}
+        numOfCausesPerPage={causesPerPage}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
       <EditCauseComponent
         editPopupStatus={editPopup}
         currentCause={currentCause}

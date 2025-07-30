@@ -9,6 +9,7 @@ class CauseController {
       causeName,
       placeName,
       causeDescription,
+      helpingHands,
       collaborationApplicationDeadline,
       time,
       startDate,
@@ -21,6 +22,7 @@ class CauseController {
       causeName,
       placeName,
       causeDescription,
+      helpingHands,
       collaborationApplicationDeadline,
       time,
       startDate,
@@ -32,7 +34,9 @@ class CauseController {
 
     res
       .status(201)
-      .json(new ApiResponse.ApiRes(201, newCause, "Cause added successfully", true));
+      .json(
+        new ApiResponse.ApiRes(201, newCause, "Cause added successfully", true)
+      );
 
     next();
   });
@@ -62,7 +66,6 @@ class CauseController {
   });
 
   updateCauseById = asyncWrapper(async (req, res) => {
-
     const causeId = req.params.causeId;
 
     const updatedCause = await Cause.findOneAndUpdate(
@@ -88,21 +91,28 @@ class CauseController {
           true
         )
       );
-  })
+  });
 
   deleteCauseById = asyncWrapper(async (req, res) => {
     const causeId = req.params.causeId;
 
     const deletedCause = await Cause.findOneAndDelete({ _id: causeId });
-    
-    if(!deletedCause){
+
+    if (!deletedCause) {
       throw new ApiError.ApiError(404, "Unable to delete cause", null, false);
     }
 
-    res.status(200).json(
-      new ApiResponse.ApiRes(200, deletedCause, "Cause deleted successfully", true)
-    );
-  })
+    res
+      .status(200)
+      .json(
+        new ApiResponse.ApiRes(
+          200,
+          deletedCause,
+          "Cause deleted successfully",
+          true
+        )
+      );
+  });
 }
 
 module.exports = CauseController;

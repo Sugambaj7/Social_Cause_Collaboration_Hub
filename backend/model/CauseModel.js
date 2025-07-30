@@ -41,23 +41,38 @@ const causeSchema = new mongoose.Schema(
           "Invalid characters in Cause Description. Only letters, numbers, spaces, and basic punctuation are allowed.",
       },
     },
-    collaborationApplicationDeadline: {
-  type: String,
-  required: true,
-  match: [/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"],
-  validate: {
-    validator: function (value) {
-      // Get today's date in YYYY-MM-DD
-      const today = new Date();
-      const yyyy = today.getFullYear();
-      const mm = String(today.getMonth() + 1).padStart(2, '0');
-      const dd = String(today.getDate()).padStart(2, '0');
-      const todayStr = `${yyyy}-${mm}-${dd}`;
-      return value >= todayStr;
+    helpingHands: {
+      type: String,
+      required: [true, "Number of Helping Hands is required"],
+      match: [
+        /^(?:[1-9]|1\d|2[0-5])$/,
+        "Number of Helping Hands must be between 1 and 25",
+      ],
+      validate: {
+        validator: function (value) {
+          const num = parseInt(value, 10);
+          return Number.isInteger(num) && num >= 1 && num <= 25;
+        },
+        message: "Number of Helping Hands must be an integer between 1 and 25",
+      },
     },
-    message: "Collaboration Application Deadline cannot be a past date.",
-  },
-},
+    collaborationApplicationDeadline: {
+      type: String,
+      required: true,
+      match: [/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"],
+      validate: {
+        validator: function (value) {
+          // Get today's date in YYYY-MM-DD
+          const today = new Date();
+          const yyyy = today.getFullYear();
+          const mm = String(today.getMonth() + 1).padStart(2, "0");
+          const dd = String(today.getDate()).padStart(2, "0");
+          const todayStr = `${yyyy}-${mm}-${dd}`;
+          return value >= todayStr;
+        },
+        message: "Collaboration Application Deadline cannot be a past date.",
+      },
+    },
     time: {
       type: String,
       required: true,
@@ -86,7 +101,7 @@ const causeSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
-    }
+    },
   },
   {
     timestamps: true,

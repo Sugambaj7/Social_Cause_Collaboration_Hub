@@ -61,7 +61,7 @@ export const PaginationComponent = ({
             Next
           </button>
         )}
-      </div>{" "}
+      </div>
     </div>
   );
 };

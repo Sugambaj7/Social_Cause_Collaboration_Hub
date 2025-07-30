@@ -9,6 +9,7 @@ export default function MyAddCauseComponent() {
   const [addCausePopup, setAddCausePopup] = useState(false);
   const [causeName, setCauseName] = useState("");
   const [placeName, setPlaceName] = useState("");
+  const [helpingHands, setHelpingHands] = useState("");
   const [causeDescription, setCauseDescription] = useState("");
   const [
     collaborationApplicationDeadline,
@@ -79,6 +80,15 @@ export default function MyAddCauseComponent() {
     } else if (!/^[A-Za-z0-9.,!?'"()&%\- ]+$/.test(causeDescription)) {
       setError("Invalid Cause Description");
       return false;
+    } else if (helpingHands === "") {
+      setError("Number of Helping Hands is not supposed to be empty");
+      return false;
+    } else if (!/^(?:[1-9]|1\d|2[0-5])$/.test(helpingHands)) {
+      setError("Invalid Number of Helping Hands");
+      return false;
+    } else if (helpingHands < 1 || helpingHands > 25) {
+      setError("Number of Helping Hands should be between 1 and 25");
+      return false;
     } else if (collaborationApplicationDeadline === "") {
       setError("Collaboration Deadline is not supposed to be empty");
       return false;
@@ -122,6 +132,7 @@ export default function MyAddCauseComponent() {
           causeName,
           placeName,
           causeDescription,
+          helpingHands,
           collaborationApplicationDeadline,
           time,
           startDate,
@@ -168,13 +179,15 @@ export default function MyAddCauseComponent() {
           + Add New Cause
         </button>
         {addCausePopup ? (
-          <div className="add-cause-popup fixed top-0 left-0 h-full w-full flex justify-center items-center">
-            <div className="rounded-md shadow p-6 border bg-white w-[30%]">
-              <div className="flex justify-between mb-6">
-                <div></div>
-                <RxCross1 onClick={() => setAddCausePopup(false)} />
+          <div className="add-cause-popup fixed top-0 left-0 h-full w-full flex justify-center items-center ">
+            <div className="rounded-md shadow p-6 border bg-white w-[30%]  max-h-[90vh] overflow-y-scroll scrollbar-hide">
+              <div className="mb-6 relative">
+                <RxCross1
+                  className="absolute top-2 right-0"
+                  onClick={() => setAddCausePopup(false)}
+                />
               </div>
-              <div>
+              <div className="add-cause-form mt-14">
                 <form
                   action=""
                   className="flex flex-col gap-4"
@@ -200,6 +213,13 @@ export default function MyAddCauseComponent() {
                     placeholder="Please Enter Cause Description"
                     className="px-4 py-2 border"
                     onChange={(e) => setCauseDescription(e.target.value)}
+                  />
+                  <label htmlFor="needed-hands">Helping Hands:</label>
+                  <input
+                    type="text"
+                    placeholder="Type number of collabs needed"
+                    className="px-4 py-2 border"
+                    onChange={(e) => setHelpingHands(e.target.value)}
                   />
                   <label htmlFor="">Application Deadline:</label>
                   <input

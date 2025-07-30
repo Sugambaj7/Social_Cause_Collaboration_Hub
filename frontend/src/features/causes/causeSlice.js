@@ -10,6 +10,7 @@ export const addCause = createAsyncThunk(
       formData.append("causeName", causeData.causeName);
       formData.append("placeName", causeData.placeName);
       formData.append("causeDescription", causeData.causeDescription);
+      formData.append("helpingHands", causeData.helpingHands);
       formData.append(
         "collaborationApplicationDeadline",
         causeData.collaborationApplicationDeadline
@@ -61,7 +62,11 @@ export const updateCauseById = createAsyncThunk(
         `causes/updateCauseById/${causeId}`,
         causeData
       );
-      console.log(causeId, causeData, "I am from updateCauseById in causeSlice.js");
+      console.log(
+        causeId,
+        causeData,
+        "I am from updateCauseById in causeSlice.js"
+      );
       return response?.data;
     } catch (error) {
       console.error("Error in updateCauseById:", error);
@@ -70,16 +75,21 @@ export const updateCauseById = createAsyncThunk(
   }
 );
 
-export const deleteCauseById = createAsyncThunk("causes/deleteCauseById", async(causeId, {rejectWithValue}) => {
-  try{
-    const response = await axiosURL.delete(`causes/deleteCauseById/${causeId}`);
-    console.log(response, "I am from deleteCauseById in causeSlice.js");
-    return response?.data;
-  }catch(error){
-    console.error("Error in deleting cause by ID:", error);
-    return rejectWithValue(error.response?.data?.message || error.message);
+export const deleteCauseById = createAsyncThunk(
+  "causes/deleteCauseById",
+  async (causeId, { rejectWithValue }) => {
+    try {
+      const response = await axiosURL.delete(
+        `causes/deleteCauseById/${causeId}`
+      );
+      console.log(response, "I am from deleteCauseById in causeSlice.js");
+      return response?.data;
+    } catch (error) {
+      console.error("Error in deleting cause by ID:", error);
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
   }
-})
+);
 
 const initialState = {
   loading: false,
@@ -161,9 +171,9 @@ const causeSlice = createSlice({
         state.success = false;
       })
       .addCase(updateCauseById.rejected, (state, action) => {
-         state.loading = false;
-         state.myerror = action.payload;
-         state.success = false;
+        state.loading = false;
+        state.myerror = action.payload;
+        state.success = false;
       })
 
       .addCase(deleteCauseById.pending, (state) => {
@@ -173,7 +183,7 @@ const causeSlice = createSlice({
       })
       .addCase(deleteCauseById.fulfilled, (state, action) => {
         state.loading = false;
-       const deletedCause = action.payload.data;
+        const deletedCause = action.payload.data;
         state.myCauses = state.myCauses.filter(
           (cause) => cause._id !== deletedCause._id
         );
@@ -183,7 +193,7 @@ const causeSlice = createSlice({
         state.loading = false;
         state.myerror = action.payload;
         state.success = false;
-      })
+      });
   },
 });
 
