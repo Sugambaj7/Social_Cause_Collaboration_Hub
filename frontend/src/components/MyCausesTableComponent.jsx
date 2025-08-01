@@ -18,6 +18,7 @@ const MyCausesTableComponent = () => {
   const handleEditClick = (cause) => () => {
     setEditPopup(true);
     setCurrentCause(cause);
+    console.log("Current Cause:", currentCause);
   };
 
   const setCurrentPageNumber = (page) => setCurrentPage(page);
@@ -33,9 +34,12 @@ const MyCausesTableComponent = () => {
           <thead className="border-b">
             <tr>
               <th className="px-6 py-4 w-[5%]">ID</th>
-              <th className="px-6 py-4 border-l w-[20%]">Cause Name</th>
+              <th className="px-6 py-4 border-l w-[15%]">Cause Name</th>
               <th className="px-6 py-4 border-l w-[13%]">Place Name</th>
-              <th className="px-6 py-4 border-l w-[28%]">Description</th>
+              <th className="px-6 py-4 border-l w-[20%]">Description</th>
+              <th className="px-6 py-4 border-l w-[13%]">
+                Needed Helping Hands
+              </th>
               <th className="px-6 py-4 border-l w-[13%]">Start Date</th>
               <th className="px-6 py-4 border-l w-[13%]">End Date</th>
               <th className="px-6 py-4 border-l w-[8%]">Actions</th>
@@ -58,6 +62,7 @@ const MyCausesTableComponent = () => {
                       ? cause.causeDescription.substring(0, 35) + "..."
                       : cause.causeDescription}
                   </td>
+                  <td className="px-6 py-4 border-l">{cause.helpingHands}</td>
                   <td className="px-6 py-4 border-l">
                     {cause.startDate.split("T")[0]}
                   </td>

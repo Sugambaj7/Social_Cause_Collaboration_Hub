@@ -12,7 +12,7 @@ export default function EditCauseComponent({
   setEditPopup,
 }) {
   const [error, setError] = useState("");
-  
+
   const dispatch = useDispatch();
 
   const currentDate = new Date();
@@ -83,6 +83,18 @@ export default function EditCauseComponent({
       !/^[A-Za-z0-9.,!?'"()&%\- ]+$/.test(currentCause.causeDescription)
     ) {
       setError("Invalid Cause Description");
+      return false;
+    } else if (currentCause.helpingHands === "") {
+      setError("Number of Helping Hands is not supposed to be empty");
+      return false;
+    } else if (!/^(?:[1-9]|1\d|2[0-5])$/.test(currentCause.helpingHands)) {
+      setError("Invalid Number of Helping Hands");
+      return false;
+    } else if (
+      currentCause.helpingHands < 1 ||
+      currentCause.helpingHands > 25
+    ) {
+      setError("Number of Helping Hands should be between 1 and 25");
       return false;
     } else if (currentCause.collaborationApplicationDeadline === "") {
       setError("Collaboration Deadline is not supposed to be empty");
@@ -157,7 +169,7 @@ export default function EditCauseComponent({
     <>
       {editPopupStatus ? (
         <div className="edit-popup fixed top-0 left-0 h-full w-full flex justify-center items-center">
-          <div className="rounded-md shadow p-6 border bg-white w-[30%]">
+          <div className="rounded-md shadow p-6 border bg-white w-[30%] max-h-[90vh] overflow-y-scroll scrollbar-hide">
             <div className="flex justify-between mb-6">
               <div></div>
               <RxCross1 onClick={() => setEditPopup(false)} />
@@ -203,6 +215,19 @@ export default function EditCauseComponent({
                     setCurrentCause({
                       ...currentCause,
                       causeDescription: e.target.value,
+                    })
+                  }
+                />
+                <label htmlFor="needed-hands">Helping Hands:</label>
+                <input
+                  type="text"
+                  placeholder="Type number of collabs needed"
+                  className="px-4 py-2 border"
+                  value={currentCause?.helpingHands}
+                  onChange={(e) =>
+                    setCurrentCause({
+                      ...currentCause,
+                      helpingHands: e.target.value,
                     })
                   }
                 />
