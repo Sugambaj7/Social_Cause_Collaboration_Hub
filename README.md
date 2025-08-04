@@ -1,1 +1,1 @@
-# **Social Cause Collaboration Hub **
+Social Cause Collaboration Hub built on MERN
