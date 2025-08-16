@@ -7,7 +7,7 @@ export default function MainLayout() {
   return (
     <div className="flex flex-col min-h-screen">
       <NavBarComponent />
-      <main className="flex-grow">
+      <main className="flex-grow h-full">
         <Outlet />
       </main>
       <FooterComponent />

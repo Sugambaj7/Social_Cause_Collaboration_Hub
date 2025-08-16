@@ -5,6 +5,7 @@ import RegisterComponent from "../components/RegisterComponent";
 import LoginComponent from "../components/LoginComponent";
 import HomeComponent from "../components/HomeComponent";
 import LoginLandingPage from "../pages/LoginLandingPage";
+import { ProfileComponent } from "../components/ProfileComponent";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <LoginLandingPage />,
+      },
+      {
+        path: "profile",
+        element: <ProfileComponent />,
       },
     ],
   },
